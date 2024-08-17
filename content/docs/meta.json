@@ -1,0 +1,11 @@
+{
+    "title": "Folder",
+    "root": true,
+    "defaultOpen": false,
+    "pages": [
+        "index",
+        "---Community Projects---",
+        "projects/riven",
+        "---Guides---"
+    ]
+}

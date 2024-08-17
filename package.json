@@ -9,12 +9,15 @@
         "start": "next start"
     },
     "dependencies": {
+        "class-variance-authority": "^0.7.0",
         "fumadocs-core": "13.2.2",
         "fumadocs-mdx": "9.0.2",
         "fumadocs-ui": "13.2.2",
+        "lucide-react": "^0.428.0",
         "next": "^14.2.5",
         "react": "^18.3.1",
-        "react-dom": "^18.3.1"
+        "react-dom": "^18.3.1",
+        "tailwind-merge": "^2.5.2"
     },
     "devDependencies": {
         "@types/mdx": "^2.0.13",
