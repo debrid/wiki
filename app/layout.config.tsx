@@ -18,7 +18,7 @@ export const baseOptions: HomeLayoutProps = {
         {
             icon: <Discord />,
             text: "Discord",
-            url: "https://discord.debrid.wiki",
+            url: "https://discord.gg/wDgVdH8vNM",
         },
     ],
     githubUrl: "https://github.com/debrid/wiki",

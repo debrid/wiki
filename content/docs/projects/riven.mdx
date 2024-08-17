@@ -4,31 +4,70 @@ description: Handle your media library with ease
 ---
 
 <div align="center">
-  <a href="https://github.com/rivenmedia/riven">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcSet="https://raw.githubusercontent.com/rivenmedia/riven/main/assets/riven-light.png"></source>
-      <img alt="Riven" src="https://raw.githubusercontent.com/dreulavelle/rivenmedia/riven/assets/riven-dark.png"></img>
-    </picture>
-  </a>
+    <a href="https://github.com/rivenmedia/riven">
+        <picture>
+            <source
+                media="(prefers-color-scheme: dark)"
+                srcSet="https://raw.githubusercontent.com/rivenmedia/riven/main/assets/riven-light.png"
+            ></source>
+            <img
+                alt="Riven"
+                src="https://raw.githubusercontent.com/dreulavelle/rivenmedia/riven/assets/riven-dark.png"
+            ></img>
+        </picture>
+    </a>
 </div>
 
 <div align="center">
-  <a href="https://github.com/rivenmedia/riven/stargazers" style={{ display: 'inline-block', marginRight: '10px' }}>
-    <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/rivenmedia/riven" />
-  </a>
-  <a href="https://github.com/rivenmedia/riven/issues" style={{ display: 'inline-block', marginRight: '10px' }}>
-    <img alt="Issues" src="https://img.shields.io/github/issues/rivenmedia/riven" />
-  </a>
-  <a href="https://github.com/rivenmedia/riven/blob/main/LICENSE" style={{ display: 'inline-block', marginRight: '10px' }}>
-    <img alt="License" src="https://img.shields.io/github/license/rivenmedia/riven" />
-  </a>
-  <a href="https://github.com/rivenmedia/riven/graphs/contributors" style={{ display: 'inline-block', marginRight: '10px' }}>
-    <img alt="Contributors" src="https://img.shields.io/github/contributors/rivenmedia/riven" />
-  </a>
-  <a href="https://discord.gg/wDgVdH8vNM" style={{ display: 'inline-block' }}>
-    <img alt="Discord" src="https://img.shields.io/badge/Join%20discord-8A2BE2" />
-  </a>
+    <a
+        href="https://github.com/rivenmedia/riven/stargazers"
+        style={{ display: "inline-block", marginRight: "10px" }}
+    >
+        <img
+            alt="GitHub Repo stars"
+            src="https://img.shields.io/github/stars/rivenmedia/riven"
+        />
+    </a>
+    <a
+        href="https://github.com/rivenmedia/riven/issues"
+        style={{ display: "inline-block", marginRight: "10px" }}
+    >
+        <img
+            alt="Issues"
+            src="https://img.shields.io/github/issues/rivenmedia/riven"
+        />
+    </a>
+    <a
+        href="https://github.com/rivenmedia/riven/blob/main/LICENSE"
+        style={{ display: "inline-block", marginRight: "10px" }}
+    >
+        <img
+            alt="License"
+            src="https://img.shields.io/github/license/rivenmedia/riven"
+        />
+    </a>
+    <a
+        href="https://github.com/rivenmedia/riven/graphs/contributors"
+        style={{ display: "inline-block", marginRight: "10px" }}
+    >
+        <img
+            alt="Contributors"
+            src="https://img.shields.io/github/contributors/rivenmedia/riven"
+        />
+    </a>
+    <a href="https://discord.gg/wDgVdH8vNM" style={{ display: "inline-block" }}>
+        <img
+            alt="Discord"
+            src="https://img.shields.io/badge/Join%20discord-8A2BE2"
+        />
+    </a>
 </div>
+
+## Overview
+
+<Callout type="warn">
+    Riven is under active development, expect breaking changes and bugs.
+</Callout>
 
 Riven is an advanced media management and streaming solution designed to integrate with various media servers and third-party services. It automates the process of finding, downloading, and organizing media content, making it instantly available for streaming through your preferred media server.
 
@@ -41,3 +80,247 @@ Riven streamlines your media consumption experience by:
 5. Providing a user-friendly web interface for easy management and configuration.
 
 Whether you're a casual viewer or a media enthusiast, Riven offers a powerful, automated solution to keep your media library up-to-date and easily accessible.
+
+## Prerequisites
+
+Before installing Riven, ensure you have the following prerequisites:
+
+<Cards>
+    <Card
+        href="/404"
+        title="Linux"
+        description="Riven only supports Linux-based operating systems and Windows Subsystem for Linux (WSL) in Windows"
+    />
+    <Card
+        href="/404"
+        title="Rclone"
+        description="Required to mount debrid service. Additionally Zurg is preferred for Real-Debrid users"
+    />
+    <Card
+        href="/404"
+        title="Media Server"
+        description="Currently only Plex Media Server is supported"
+    />
+    <Card
+        href="/404"
+        title="Docker"
+        description="Required to run Riven in a containerized environment"
+    />
+</Cards>
+
+<Callout type="info">
+    Currently only Real-Debrid, All-Debrid and Torbox are supported. More
+    services will be added in the future.
+</Callout>
+
+## Setup
+
+Before we begin, we need to set up the required folders and files for Riven.
+
+### Clone repository and create folders
+
+```bash
+git clone https://github.com/rivenmedia/riven
+cd riven
+mkdir data
+```
+
+`riven` folder consists of `data` folder and `docker-compose.yml` file which will be used later.
+
+### Setup Library folder
+
+#### What is Library folder?
+
+Library folder is the folder where Riven will store movie/show files and [symlinks](https://en.wikipedia.org/wiki/Symbolic_link).
+These point to the actual files on the rclone mount
+
+For this example, we are assuming `/mnt/zurg` is the rclone mount path.
+
+```bash
+sudo mkdir -p /mnt/library
+```
+
+## Installation
+
+`docker-compose.yml` file is used to run Riven in a containerized environment. It consists of three services:
+
+1. `riven`: The main Riven application.
+2. `riven-frontend`: The web interface for Riven.
+3. `riven-db`: The database for Riven.
+
+```yml title="docker-compose.yml"
+services:
+    riven-frontend:
+        image: spoked/riven-frontend:latest
+        container_name: riven-frontend
+        restart: unless-stopped
+        ports:
+            - "3000:3000"
+        tty: true
+        environment:
+            - PUID=1000
+            - PGID=1000
+            - TZ=America/New_York
+            - ORIGIN=http://localhost:3000
+            - BACKEND_URL=http://riven:8080
+            - DIALECT=postgres
+            - DATABASE_URL=postgres://postgres:postgres@riven-db/riven
+        depends_on:
+            riven:
+                condition: service_healthy
+
+    riven:
+        image: spoked/riven:latest
+        container_name: riven
+        restart: unless-stopped
+        ports:
+            - "8080:8080"
+        tty: true
+        environment:
+            - PUID=1000
+            - PGID=1000
+            - TZ=America/New_York
+            - RIVEN_FORCE_ENV=true
+            - RIVEN_DATABASE_HOST=postgresql+psycopg2://postgres:postgres@riven-db/riven
+        healthcheck:
+            test: curl -s http://localhost:8080 >/dev/null || exit 1
+            interval: 30s
+            timeout: 10s
+            retries: 10
+        volumes:
+            - ./data:/riven/data
+            - /mnt:/mnt
+        depends_on:
+            riven_postgres:
+                condition: service_healthy
+
+    riven_postgres:
+        image: postgres:16.3-alpine3.20
+        container_name: riven-db
+        environment:
+            PGDATA: /var/lib/postgresql/data/pgdata
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_DB: riven
+        volumes:
+            - ./riven-db:/var/lib/postgresql/data/pgdata
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U postgres"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+```
+
+Now this won't work as is, you need to modify the `docker-compose.yml` file to match your setup.
+
+1. Change `TZ` to your timezone.
+2. Change `ORIGIN` to the URL you will be accessing the web interface from. For example, if you are planning to run Riven on `https://riven.example.com`,
+   change it to `https://riven.example.com`. This is not required if you are running riven behind a reverse proxy like `nginx`, `caddy`, `cosmos` etc.
+3. Change `BACKEND_URL` to the URL where the frontend can access the backend. This is not required here as we are running both frontend and backend in the same network (stack).
+4. Change `RIVEN_DATABASE_HOST` to the URL where the backend can access the database. This is not required here as we are running both backend and database in the same network (stack).
+5. Change `DIALECT` and `DATABASE_URL` to use the same database as the backend. This is not required here as we are running both backend and database in the same network (stack).
+6. Change `volumes` to match your setup. Riven requires access to the library folder and rclone mount path.
+
+## Running Riven
+
+To run Riven, execute the following command:
+
+```bash
+docker-compose up -d
+```
+
+This command will start the Riven services in the background. You can access the Riven web interface by navigating to the specified `ORIGIN` URL or reverse proxy URL.
+
+## Configuration
+
+Once Riven is running, you can configure it by accessing the web interface. You will be prompted with onboarding steps to set up your debrid service, media server, content services and scraper services.
+
+There are 4 steps in the onboarding process:
+
+### General Settings
+
+In this step you configure the downloaders (debrid services), rclone mount path, library path, subtitles, etc. See the image below for an example.
+
+<ImageSection
+    width={700}
+    height={600}
+    className="mx-auto"
+    alt="step-1"
+    src="https://i.imgur.com/4p9QTOX.png"
+/>
+
+### Media Server
+
+In this step you configure the media server and updater settings. See the image below for an example.
+
+<ImageSection
+    width={700}
+    height={600}
+    className="mx-auto"
+    alt="step-2"
+    src="https://i.imgur.com/vle5sHE.png"
+/>
+
+### Content Services
+
+In this step you configure the content services like trakt, overseerr, etc. See the image below for an example.
+
+<ImageSection
+    width={700}
+    height={600}
+    className="mx-auto"
+    alt="step-3"
+    src="https://i.imgur.com/e5yomfS.png"
+/>
+
+### Scraper Services
+
+In this step you configure the scraper services like torrentio, zilean, prowlarr, jackett, etc. See the image below for an example.
+
+<ImageSection
+    width={700}
+    height={600}
+    className="mx-auto"
+    alt="step-4"
+    src="https://i.imgur.com/zGSSSp9.png"
+/>
+
+---
+
+Once you have completed the onboarding process, you will be greeted with a beautiful dashboard where you can manage your media library, request items, settings and many more in the future.
+
+<ImageSection
+    width={700}
+    height={600}
+    className="mx-auto"
+    alt="dashboard"
+    src="https://i.imgur.com/XyjpS8R.png"
+/>
+
+---
+
+## Frequently Asked Questions
+
+<Accordions>
+    <Accordion title="Save changes is doing nothing in onboarding/settings">
+        The most common reason for this is that you may have not setup `ORIGIN`
+        correctly in the `docker-compose.yml` file. If you are running Riven
+        behind a reverse proxy, you can remove the `ORIGIN` environment variable
+        from the `riven-frontend` service.
+    </Accordion>
+
+    <Accordion title="I am seeing error when trying to save changes">
+        If you are seeing an error when trying to save changes, it is most likely
+        due to incorrect configuration or backend failure. Please check the logs of the `riven` service
+        to see the error message. If you are unable to resolve the issue, feel free
+        to ask for help in the [Riven Discord server](https://discord.gg/wDgVdH8vNM).
+    </Accordion>
+
+    <Accordion title="I am stuck in onboarding loop">
+        If you are stuck in the onboarding loop, it is most likely due to `symlink` settings being wrong.
+        Check your `library` path and `rclone` mount path. If they are correct, check the logs of the `riven` service.
+        If you are unable to resolve the issue, feel free to ask for help in the [Riven Discord server](https://discord.gg/wDgVdH8vNM).
+    </Accordion>
+
+</Accordions>
+

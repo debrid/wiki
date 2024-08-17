@@ -26,6 +26,19 @@ const config = {
     compress: true,
     swcMinify: true,
     cleanDistDir: true,
+    images: {
+        remotePatterns: [
+            {
+                hostname: "debrid.wiki",
+            },
+            {
+                hostname: "raw.githubusercontent.com",
+            },
+            {
+                hostname: "i.imgur.com",
+            },
+        ],
+    },
 };
 
 export default withMDX(config);

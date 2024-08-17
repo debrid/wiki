@@ -7,6 +7,7 @@ import { Edit } from "lucide-react";
 import { cn } from "@/app/utils/cn";
 import { buttonVariants } from "@/app/components/ui/button";
 import { Callout } from "fumadocs-ui/components/callout";
+import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
 
 export default async function Page({
     params,
@@ -54,6 +55,8 @@ export default async function Page({
                 <MDX
                     components={{
                         Callout,
+                        Accordion,
+                        Accordions,
                     }}
                 />
             </DocsBody>
