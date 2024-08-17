@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/debrid/wiki/compare/v0.2.0...v0.2.1) (2024-08-17)
+
+
+### Bug Fixes
+
+* images not loading ([7b40d09](https://github.com/debrid/wiki/commit/7b40d09a45a34cc62d297ce611d5376ed0f996d4))
+
 ## [0.2.0](https://github.com/debrid/wiki/compare/v0.1.0...v0.2.0) (2024-08-17)
 
 
