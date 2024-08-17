@@ -3,6 +3,8 @@ title: Riven
 description: Handle your media library with ease
 ---
 
+import { File, Folder, Files } from "fumadocs-ui/components/files";
+
 <div align="center">
     <a href="https://github.com/rivenmedia/riven">
         <picture>
@@ -127,6 +129,12 @@ mkdir data
 
 `riven` folder consists of `data` folder and `docker-compose.yml` file which will be used later.
 
+<Files>
+    <Folder name="data" defaultOpen />
+    <File name="docker-compose.yml" />
+    <File name="...other files and folders" />
+</Files>
+
 ### Setup Library folder
 
 #### What is Library folder?
@@ -139,6 +147,13 @@ For this example, we are assuming `/mnt/zurg` is the rclone mount path.
 ```bash
 sudo mkdir -p /mnt/library
 ```
+
+<Files>
+  <Folder name="/mnt" defaultOpen>
+    <Folder name="library" />
+    <Folder name="mnt" />
+  </Folder>
+</Files>
 
 ## Installation
 
@@ -302,21 +317,21 @@ Once you have completed the onboarding process, you will be greeted with a beaut
 ## Frequently Asked Questions
 
 <Accordions>
-    <Accordion title="Save changes is doing nothing in onboarding/settings">
+    <Accordion title="Save changes is doing nothing in onboarding/settings" id="save-changes">
         The most common reason for this is that you may have not setup `ORIGIN`
         correctly in the `docker-compose.yml` file. If you are running Riven
         behind a reverse proxy, you can remove the `ORIGIN` environment variable
         from the `riven-frontend` service.
     </Accordion>
 
-    <Accordion title="I am seeing error when trying to save changes">
+    <Accordion title="I am seeing error when trying to save changes" id="save-error">
         If you are seeing an error when trying to save changes, it is most likely
         due to incorrect configuration or backend failure. Please check the logs of the `riven` service
         to see the error message. If you are unable to resolve the issue, feel free
         to ask for help in the [Riven Discord server](https://discord.gg/wDgVdH8vNM).
     </Accordion>
 
-    <Accordion title="I am stuck in onboarding loop">
+    <Accordion title="I am stuck in onboarding loop" id="onboarding-loop">
         If you are stuck in the onboarding loop, it is most likely due to `symlink` settings being wrong.
         Check your `library` path and `rclone` mount path. If they are correct, check the logs of the `riven` service.
         If you are unable to resolve the issue, feel free to ask for help in the [Riven Discord server](https://discord.gg/wDgVdH8vNM).
