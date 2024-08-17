@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.2](https://github.com/debrid/wiki/compare/v0.2.1...v0.2.2) (2024-08-17)
+
+
+### Bug Fixes
+
+* some ui improvements ([813920e](https://github.com/debrid/wiki/commit/813920eea84559613827f2ca747a7c0c7576debd))
+
 ## [0.2.1](https://github.com/debrid/wiki/compare/v0.2.0...v0.2.1) (2024-08-17)
 
 
