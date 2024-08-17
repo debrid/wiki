@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.2](https://github.com/debrid/wiki/compare/v0.0.1...v0.0.2) (2024-08-17)
+
+
+### Bug Fixes
+
+* add robots.txt ([05930f0](https://github.com/debrid/wiki/commit/05930f07672ed61462f6a86d85cc3113cba75afb))
+
 ## 0.0.1 (2024-08-17)
 
 
