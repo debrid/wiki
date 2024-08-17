@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.0](https://github.com/debrid/wiki/compare/v0.0.2...v0.1.0) (2024-08-17)
+
+
+### Features
+
+* initial setup ([3ed4d9e](https://github.com/debrid/wiki/commit/3ed4d9e1edf0b1066c89ead4fdfdd59397596c6c))
+
+
+### Bug Fixes
+
+* github edit url ([f09f9fa](https://github.com/debrid/wiki/commit/f09f9fa2948baf61ff57d208cd12830bfdf1abf5))
+
 ## [0.0.2](https://github.com/debrid/wiki/compare/v0.0.1...v0.0.2) (2024-08-17)
 
 
