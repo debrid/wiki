@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/debrid/wiki/compare/v0.1.0...v0.2.0) (2024-08-17)
+
+
+### Features
+
+* add riven and site metadata ([13d3af6](https://github.com/debrid/wiki/commit/13d3af675209ec241db790015edbaf2f7603e66d))
+
 ## [0.1.0](https://github.com/debrid/wiki/compare/v0.0.2...v0.1.0) (2024-08-17)
 
 
