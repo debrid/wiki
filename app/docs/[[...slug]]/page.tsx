@@ -20,7 +20,7 @@ export default async function Page({
     }
 
     const MDX = page.data.exports.default;
-    const path = `app/docs/content/docs/${page.file.path}`;
+    const path = `/content/docs/${page.file.path}`;
 
     const footer = (
         <a
