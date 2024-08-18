@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/debrid/wiki/compare/v0.2.2...v0.3.0) (2024-08-18)
+
+
+### Features
+
+* add rclone ([d998f6b](https://github.com/debrid/wiki/commit/d998f6b988f6693d205fe4bdac670896d425a309))
+
 ## [0.2.2](https://github.com/debrid/wiki/compare/v0.2.1...v0.2.2) (2024-08-17)
 
 
