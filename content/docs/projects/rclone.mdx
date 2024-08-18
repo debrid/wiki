@@ -315,7 +315,20 @@ Another way is to see the rclone documentation for the remote you want to setup.
 
 Examples of remotes:
 
-1. FTPS remote ([ultra.cc](https://docs.ultra.cc/books/rclone/page/using-rclone-ftps))
+1. Webdav remote
+
+```bash title="rclone.conf"
+[webdav]
+type = webdav
+url = webdav_url
+vendor = other
+user = webdav_user
+pass = webdav_password
+```
+
+2. All-Debrid webdav remote [guide](https://help.alldebrid.com/en/faq/rclone-webdav)
+
+3. FTPS remote ([ultra.cc](https://docs.ultra.cc/books/rclone/page/using-rclone-ftps))
 
 ```bash title="rclone.conf"
 [ultra]
@@ -327,4 +340,3 @@ explicit_tls = true
 no_check_certificate = true
 ```
 
-2. All-Debrid webdav remote [guide](https://help.alldebrid.com/en/faq/rclone-webdav)
