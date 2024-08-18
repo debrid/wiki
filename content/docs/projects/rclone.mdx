@@ -1,0 +1,330 @@
+---
+title: Rclone
+description: Rclone is a command line program to manage files on cloud storage.
+---
+
+import { File, Folder, Files } from "fumadocs-ui/components/files";
+
+<div align="center">
+    <a href="https://rclone.org/">
+        <img alt="Rclone" src="/img/rclone/rclone.png"></img>
+    </a>
+</div>
+
+<div align="center">
+    <a
+        href="https://github.com/rclone/rclone/stargazers"
+        style={{ display: "inline-block", marginRight: "10px" }}
+    >
+        <img
+            alt="GitHub Repo stars"
+            src="https://img.shields.io/github/stars/rclone/rclone"
+        />
+    </a>
+    <a
+        href="https://github.com/rclone/rclone/issues"
+        style={{ display: "inline-block", marginRight: "10px" }}
+    >
+        <img
+            alt="Issues"
+            src="https://img.shields.io/github/issues/rclone/rclone"
+        />
+    </a>
+    <a
+        href="https://github.com/rclone/rclone/blob/main/LICENSE"
+        style={{ display: "inline-block", marginRight: "10px" }}
+    >
+        <img
+            alt="License"
+            src="https://img.shields.io/github/license/rclone/rclone"
+        />
+    </a>
+    <a
+        href="https://github.com/rclone/rclone/graphs/contributors"
+        style={{ display: "inline-block", marginRight: "10px" }}
+    >
+        <img
+            alt="Contributors"
+            src="https://img.shields.io/github/contributors/rclone/rclone"
+        />
+    </a>
+</div>
+
+## Overview
+
+Rclone is a command line program to manage files on cloud storage. It is a feature rich alternative to cloud vendors' web storage interfaces.
+This is what is used to mount your Debrid cloud storage to your server. It is a very powerful tool and can be used to sync files, copy files, mount drives, and much more.
+
+## What you'll learn
+
+-   How to install Rclone on your server
+-   How to configure Rclone
+-   How to mount your Debrid cloud storage to your server
+
+<Callout>
+    We will be using real-debrid and zurg for this guide. You can use any other
+    Debrid service too.
+</Callout>
+
+## Prerequisites
+
+<Cards>
+    <Card
+        href="/404"
+        title="Linux"
+        description="Since this guide is for Linux, you need to have a Linux server"
+    />
+    <Card
+        href="/404"
+        title="Debrid Service"
+        description="Debrid Service like real-debrid"
+    />
+    <Card
+        href="/404"
+        title="Docker (Optional)"
+        description="Required to run rclone in a containerized environment. Only required if you want to run rclone in a container"
+    />
+    <Card
+        href="/404"
+        title="Zurg (Optional)"
+        description="This guide uses zurg with real-debrid. Not required, but preferred for real-debrid users for better performance"
+    />
+</Cards>
+
+## Setup
+
+We need to setup rclone cache folder and mount folder:
+
+```bash title="Create cache and mount folders"
+mkdir -p /mnt/cache /mnt/zurg
+```
+
+<Files>
+    <Folder name="/mnt" defaultOpen>
+        <Folder name="/cache" />
+        <Folder name="/zurg" />
+    </Folder>
+</Files>
+
+## Installation
+
+### Baremetal rclone
+
+#### Install rclone
+
+```bash title="Install rclone"
+sudo -v ; curl https://rclone.org/install.sh | sudo bash
+```
+
+```bash title="Find config path"
+rclone config file
+```
+
+It will output something like this:
+
+```bash title="Output"
+$ rclone config file
+Configuration file is stored at:
+/home/ubuntu/.config/rclone/rclone.conf
+```
+
+<Callout type="warn">
+    If you ever use sudo with rclone, make sure to use the `--config` flag to
+    specify the config file path or it will use the root user's config file.
+</Callout>{" "}
+
+#### Configure rclone
+
+Open the file in your favorite text editor:
+
+```bash title="Open rclone.conf"
+nano ~/.config/rclone/rclone.conf
+```
+
+Paste the zurg webdav and http remote configurations in the file:
+
+```bash title="rclone.conf"
+[zurg]
+type = webdav
+url = http://localhost:9999/dav/
+vendor = other
+pacer_min_sleep = 0
+
+[zurghttp]
+type = http
+url = http://localhost:9999/http/
+no_head = false
+no_slash = false
+```
+
+<Callout>Make sure zurg is running before you try to mount the remote.</Callout>
+
+<Callout>
+    For other debrid services or without zurg, you can mount the
+    webdav/ftp/ftps/sftp remote directly. You can find some examples at the end
+    of this guide.
+</Callout>
+
+#### Setup dependencies
+
+Make sure you have `fuse3` installed:
+
+```bash title="Install fuse3"
+sudo apt install fuse3
+```
+
+Edit the `fuse` configuration file:
+
+```bash title="Edit fuse configuration"
+sudo nano /etc/fuse.conf
+```
+
+Uncomment the following line:
+
+```bash title="Uncomment the line"
+# user_allow_other
+```
+
+#### Running rclone
+
+Now we need to make a service file which will mount the remote:
+
+```bash title="Create rclone service file"
+sudo nano /etc/systemd/system/realdebrid.service
+```
+
+Paste the following in the file:
+
+```bash title="realdebrid.service"
+[Unit]
+Description=Rclone Mount Service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/rclone mount zurg: /mnt/zurg --allow-other --async-read --allow-non-empty --dir-cache-time=5s --buffer-size=64M --poll-interval=15s --use-mmap --vfs-read-ahead=128M --vfs-read-chunk-size=64M --vfs-read-chunk-size-limit=2048M --vfs-cache-max-age=48h --vfs-cache-mode=full --vfs-cache-poll-interval=30s --vfs-cache-max-size=70G --cache-dir=/mnt/cache --uid=1000 --gid=1000
+ExecStop=/bin/fusermount -u /mnt/zurg
+Restart=on-failure
+RestartSec=10
+User=YOUR_USERNAME
+Group=YOUR_USERNAME
+
+[Install]
+WantedBy=default.target
+```
+
+Edit the `ExecStart` to your preference & `User` and `Group` fields with your username.
+
+If required, you can change the `ExecStart` options as per your requirements. For example:
+
+-   `--vfs-cache-max-size=70G` - Maximum size of the cache
+-   `--cache-dir=/mnt/cache` - Cache directory
+-   `--vfs-cache-max-age=48h` - Max age of objects in the cache
+-   `--uid=1000 --gid=1000` - User and group id. Default should be good for most users
+
+Reload the systemd daemon:
+
+```bash title="Reload systemd daemon"
+sudo systemctl daemon-reload
+```
+
+Start the service:
+
+```bash title="Start the service"
+sudo systemctl start realdebrid
+```
+
+Verify the service is running:
+
+```bash title="Check service status"
+sudo systemctl status realdebrid
+```
+
+And voila! Your Debrid cloud storage is now mounted to your server. You can verify it by running `ls /mnt/zurg`.
+You should see some files and folders related to your Debrid service.
+
+---
+
+### Docker rclone
+
+#### For `zurg` users
+
+For `zurg` users, you can follow the github instruction on `zurg` [repository](https://github.com/debridmediamanager/zurg-testing?tab=readme-ov-file#how-to-run-zurg-in-5-steps-for-plex-with-docker).
+The compose files comes with `rclone` and `zurg` pre-configured.
+
+<Callout>
+    Zurg can be used with baremetal rclone too. It is not necessary to use
+    docker rclone. See zurg documentation for more information.
+</Callout>
+
+#### For other debrid services
+
+For other debrid services, you can use the following docker-compose file:
+
+```yaml title="docker-compose.yml"
+services:
+    service-name:
+        image: rclone/rclone:latest
+        container_name: service-name
+        restart: unless-stopped
+        environment:
+            TZ: Asia/Kolkata
+        volumes:
+            - /mnt/destination:/data:rshared
+            - /mnt/cache:/mnt/cache
+            - ./rclone.conf:/config/rclone/rclone.conf
+        cap_add:
+            - SYS_ADMIN
+        security_opt:
+            - apparmor:unconfined
+        devices:
+            - /dev/fuse:/dev/fuse:rwm
+        command: "mount name: /data --allow-other --async-read --allow-non-empty --dir-cache-time=5s --buffer-size=64M --poll-interval=15s --use-mmap --vfs-read-ahead=128M --vfs-read-chunk-size=64M --vfs-read-chunk-size-limit=2048M --vfs-cache-max-age=48h --vfs-cache-mode=full --vfs-cache-poll-interval=30s --vfs-cache-max-size=10G --cache-dir=/mnt/cache --umask=002 --uid=1000 --gid=1000"
+```
+
+<Files>
+    <Folder name="/home/user/debrid-rclone-mount" defaultOpen>
+        <File name="docker-compose.yml" />
+        <File name="rclone.conf" />
+    </Folder>
+</Files>
+
+Make sure to replace `name:` with your remote name specified in the `rclone.conf` file, `service-name` with your desired container name and
+`/mnt/destination` with the path where you want to mount the remote.
+
+If required you can change the `command` options as per your requirements. For example:
+
+-   `--vfs-cache-max-size=10G` - Maximum size of the cache
+-   `--cache-dir=/mnt/cache` - Cache directory
+-   `--vfs-cache-max-age=48h` - Max age of objects in the cache
+-   `--uid=1000 --gid=1000` - User and group id. Default should be good for most users
+
+#### How do i setup `rclone.conf`?
+
+One way is to run `rclone config` on host and then create a new remote. Follow the instructions and set it up. Then copy the remote config to the `rclone.conf`
+file in the same directory as `docker-compose.yml`.
+
+<Callout>
+    What we are doing here is using rclone on the host to setup the remote and
+    then using the same config in the docker container. This way we don't have to setup the config ourselves in the container.
+
+    tldr; copying that specific remote from `~/.config/rclone/rclone.conf` to the `rclone.conf` file in the same directory as `docker-compose.yml`.
+</Callout>
+
+Another way is to see the rclone documentation for the remote you want to setup. They have examples for most of the remotes.
+
+Examples of remotes:
+
+1. FTPS remote ([ultra.cc](https://docs.ultra.cc/books/rclone/page/using-rclone-ftps))
+
+```bash title="rclone.conf"
+[ultra]
+type = ftp
+host = host_name
+user = username
+pass = password___rclone_encrypts_it_by_default
+explicit_tls = true
+no_check_certificate = true
+```
+
+2. All-Debrid webdav remote [guide](https://help.alldebrid.com/en/faq/rclone-webdav)

@@ -94,7 +94,7 @@ Before installing Riven, ensure you have the following prerequisites:
         description="Riven only supports Linux-based operating systems and Windows Subsystem for Linux (WSL) in Windows"
     />
     <Card
-        href="/404"
+        href="/docs/projects/rclone"
         title="Rclone"
         description="Required to mount debrid service. Additionally Zurg is preferred for Real-Debrid users"
     />
@@ -150,8 +150,8 @@ sudo mkdir -p /mnt/library
 
 <Files>
   <Folder name="/mnt" defaultOpen>
-    <Folder name="library" />
-    <Folder name="mnt" />
+    <Folder name="/library" />
+    <Folder name="/zurg" />
   </Folder>
 </Files>
 
@@ -336,6 +336,5 @@ Once you have completed the onboarding process, you will be greeted with a beaut
         Check your `library` path and `rclone` mount path. If they are correct, check the logs of the `riven` service.
         If you are unable to resolve the issue, feel free to ask for help in the [Riven Discord server](https://discord.gg/wDgVdH8vNM).
     </Accordion>
-
 </Accordions>
 

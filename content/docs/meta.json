@@ -5,6 +5,7 @@
     "pages": [
         "index",
         "---Community Projects---",
+        "projects/rclone",
         "projects/riven",
         "---Guides---"
     ]
