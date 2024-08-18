@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/debrid/wiki/compare/v0.3.0...v0.3.1) (2024-08-18)
+
+
+### Bug Fixes
+
+* add webdav rclone.conf ([a980696](https://github.com/debrid/wiki/commit/a980696d7fb80da25c2249ab3a798c9dff9b5124))
+
 ## [0.3.0](https://github.com/debrid/wiki/compare/v0.2.2...v0.3.0) (2024-08-18)
 
 
