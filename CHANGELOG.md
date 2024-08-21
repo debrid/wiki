@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/debrid/wiki/compare/v0.3.1...v0.4.0) (2024-08-21)
+
+
+### Features
+
+* add zilean ([2f3e877](https://github.com/debrid/wiki/commit/2f3e877196426822aa8e300f3e887706297c25b2))
+
 ## [0.3.1](https://github.com/debrid/wiki/compare/v0.3.0...v0.3.1) (2024-08-18)
 
 
