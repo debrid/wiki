@@ -5,11 +5,12 @@
     "pages": [
         "index",
         "---Tools---",
-        "projects/rclone",
+        "(tools)/rclone",
         "---Apps---",
-        "projects/riven",
+        "(apps)/riven",
         "---Scrapers---",
-        "projects/zilean",
-        "---Guides---"
+        "(scrapers)/zilean",
+        "---Guides---",
+        "...guides"
     ]
 }
