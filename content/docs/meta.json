@@ -4,9 +4,12 @@
     "defaultOpen": false,
     "pages": [
         "index",
-        "---Community Projects---",
+        "---Tools---",
         "projects/rclone",
+        "---Apps---",
         "projects/riven",
+        "---Scrapers---",
+        "projects/zilean",
         "---Guides---"
     ]
 }

@@ -1,0 +1,147 @@
+---
+title: Zilean
+description: DMM sourced arr-less searching for Riven
+---
+
+import { File } from "fumadocs-ui/components/files";
+
+<div align="center">
+    <a href="https://github.com/iPromKnight/zilean">
+        <img
+            alt="Rclone"
+            src="https://avatars.githubusercontent.com/u/156901906?v=4"
+        ></img>
+    </a>
+</div>
+
+<div align="center">
+    <a
+        href="https://github.com/iPromKnight/zilean/stargazers"
+        style={{ display: "inline-block", marginRight: "10px" }}
+    >
+        <img
+            alt="GitHub Repo stars"
+            src="https://img.shields.io/github/stars/iPromKnight/zilean"
+        />
+    </a>
+    <a
+        href="https://github.com/iPromKnight/zilean/issues"
+        style={{ display: "inline-block", marginRight: "10px" }}
+    >
+        <img
+            alt="Issues"
+            src="https://img.shields.io/github/issues/iPromKnight/zilean"
+        />
+    </a>
+    <a
+        href="https://github.com/iPromKnight/zilean/blob/main/LICENSE"
+        style={{ display: "inline-block", marginRight: "10px" }}
+    >
+        <img
+            alt="License"
+            src="https://img.shields.io/github/license/iPromKnight/zilean"
+        />
+    </a>
+    <a
+        href="https://github.com/iPromKnight/zilean/graphs/contributors"
+        style={{ display: "inline-block", marginRight: "10px" }}
+    >
+        <img
+            alt="Contributors"
+            src="https://img.shields.io/github/contributors/iPromKnight/zilean"
+        />
+    </a>
+</div>
+
+## Overview
+
+Zilean is a service that allows you to search for DebridMediaManager sourced arr-less content. When the service is started,
+it will automatically download and index all the DMM shared hashlists and index them using Lucene. The service provides a search endpoint
+that allows you to search for content using a query string, and returns a list of filenames and infohashes.
+There is no clean filtering applied to the search results, the idea behind this endpoint is Riven performs that using RTN.
+The DMM import reruns on missing pages every hour.
+
+## Prerequisites
+
+<Cards>
+    <Card
+        href="/404"
+        title="Docker"
+        description="Required to run zilean in a containerized environment."
+    />
+</Cards>
+
+## Setup
+
+For setting up Zilean, you can add it to your existing docker-compose file or create a new one. Below is an example of how you can add Zilean to your docker-compose file.
+
+<File name="docker-compose.yml" />
+
+## Installation
+
+To install Zilean, you can use the following docker-compose file.
+
+<Callout type="warn">
+    By default, Zilean will use upto 6-7 GB of RAM for about an hour to index all the DMM shared hashlists.
+    You can uncomment the `Zilean__Dmm__ImportBatched` environment variable to enable batched import, which is for low-end systems.
+</Callout>
+
+```yaml title="docker-compose.yml"
+volumes:
+    zilean_data:
+    zilean-pg-data:
+
+services:
+    zilean:
+        image: ipromknight/zilean:latest
+        restart: unless-stopped
+        container_name: zilean
+        tty: true
+        ports:
+            - "8181:8181"
+        volumes:
+            - zilean_data:/app/data
+        environment:
+            Zilean__Database__ConnectionString: "Host=postgres;Port=5432;Database=zilean;Username=postgres;Password=postgres"
+            # Zilean__Dmm__ImportBatched: "true"         Allows enabling batched import - this is for low-end systems.
+            # Zilean__Dmm__MaxFilteredResults: 200       Allows changing the maximum number of filtered results returned by the DMM API. 200 is the default.
+            # Zilean__Dmm__MinimumScoreMatch: 0.85       Allows changing the minimum score match for the DMM API. 0.85 is the default. Values between 0 and 1 are accepted.
+        healthcheck:
+            test: curl --connect-timeout 10 --silent --show-error --fail http://localhost:8181/healthchecks/ping
+            timeout: 60s
+            interval: 30s
+            retries: 10
+        depends_on:
+            zilean-postgres:
+                condition: service_healthy
+
+    zilean-postgres:
+        image: postgres:16.3-alpine3.20
+        container_name: zilean-postgres
+        restart: unless-stopped
+        environment:
+            PGDATA: /var/lib/postgresql/data/pgdata
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_DB: zilean
+        ports:
+            - "5432:5432"
+        volumes:
+            - zilean-pg-data:/var/lib/postgresql/data/pgdata
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U postgres"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+```
+
+You can modify the environment variables as needed. The default values are shown in the example above.
+
+- `Zilean__Database__ConnectionString`: The connection string for the PostgreSQL database. You can modify this to match your database configuration.
+- `Zilean__Dmm__ImportBatched`: Allows enabling batched import - this is for low-end systems.
+- `Zilean__Dmm__MaxFilteredResults`: Allows changing the maximum number of filtered results returned by the DMM API. 200 is the default.
+- `Zilean__Dmm__MinimumScoreMatch`: Allows changing the minimum score match for the DMM API. 0.85 is the default. Values between 0 and 1 are accepted.
+
+## Usage
+
+Once Zilean is up and running, you can enable the service in Riven with the correct URL and port. The default URL is `http://localhost:8181`.
