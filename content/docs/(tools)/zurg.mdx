@@ -1,0 +1,423 @@
+---
+title: Zurg
+description: Zurg is a high-performance HTTP proxy for Real-Debrid
+---
+
+import { File, Folder, Files } from "fumadocs-ui/components/files";
+
+<div align="center">
+    <a href="https://github.com/debridmediamanager/zurg-testing">
+        <img alt="Zurg" src="/img/zurg/zurg.png"></img>
+    </a>
+</div>
+
+## Overview
+
+Zurg is a high-performance HTTP proxy for Real-Debrid. It provides a WebDAV interface to access your Real-Debrid files, making it easier to integrate with media servers and other applications.
+
+## Sponsor this project
+
+If you find Zurg useful and want to support its development, consider sponsoring the project. Your sponsorship helps maintain and improve Zurg, and may provide access to additional features or early releases.
+
+You can sponsor Zurg through the following platforms:
+
+- [GitHub Sponsors](https://github.com/sponsors/debridmediamanager)
+- [Patreon](https://patreon.com/debridmediamanager)
+- [PayPal](https://paypal.me/yowmamasita)
+
+Sponsoring the project not only supports its development but may also grant you access to the latest version of Zurg, which is currently only available to sponsors.
+
+<Callout type="info">
+  Becoming a sponsor may provide you with access to the latest version of Zurg (v0.10.0-rc.4-1), which includes additional features and improvements.
+</Callout>
+
+## What you'll learn
+
+- How to install Zurg on your server
+- How to configure Zurg
+- How to use Zurg with Rclone
+
+## Prerequisites
+
+<Cards>
+    <Card
+        href="/404"
+        title="Linux"
+        description="Since this guide is for Linux, you need to have a Linux server"
+    />
+    <Card
+        href="/404"
+        title="Real-Debrid Account"
+        description="A valid Real-Debrid account is required"
+    />
+    <Card
+        href="/404"
+        title="Docker"
+        description="Docker is required to run Zurg in a containerized environment"
+    />
+</Cards>
+
+## Installation
+
+There are two versions of Zurg available:
+
+1. Latest version (v0.10.0-rc.4-1, Sponsors only)
+2. Stable version (v0.9.3-hotfix.11, Public)
+
+<Callout type="info">
+  The latest version is only available to sponsors and requires authentication to access.
+</Callout>
+
+### Latest Version (Sponsors only)
+
+To install the latest version of Zurg (v0.10.0-rc.4-1), follow these steps:
+
+1. Pull the Docker image:
+   ```bash
+   docker pull ghcr.io/debridmediamanager/zurg:latest
+   # or
+   docker pull ghcr.io/debridmediamanager/zurg:v0.10.0-rc.4-1
+   ```
+
+2. If you're getting an "Unauthorized" error when pulling the Docker image, follow these steps:
+
+   a. Create a personal access token on GitHub:
+      - Go to https://github.com/settings/tokens
+      - Make sure the "package read" permission is enabled
+   
+   b. Log out of the GitHub Container Registry:
+   ```bash
+   docker logout ghcr.io
+   ```
+
+   c. Log in to the GitHub Container Registry using your GitHub username and the personal access token:
+   ```bash
+   docker login ghcr.io -u your_github_username -p your_personal_access_token
+   ```
+
+   d. Try pulling the image again.
+
+<Callout type="info">
+  The stable version is publicly available and does not require sponsor access.
+</Callout>
+
+### Stable Version (Public)
+
+To install the stable version of Zurg (v0.9.3-hotfix.11), you have two options:
+
+1. Download the binary from the [Zurg GitHub releases page](https://github.com/debridmediamanager/zurg-testing/releases).
+
+2. Use Docker to pull and run the image:
+
+   ```bash
+   docker pull ghcr.io/debridmediamanager/zurg-testing:latest
+   # or
+   docker pull ghcr.io/debridmediamanager/zurg-testing:v0.9.3-hotfix.11
+   ```
+
+   After pulling the image, you can run it using Docker Compose or a Docker run command, as described in the "Running Zurg with Docker" section below.
+
+
+## Configuration
+
+For v0.10, Zurg's configuration is primarily done through the `config.yml` file. Refer to the [Zurg GitHub repository](https://github.com/debridmediamanager/zurg-testing/wiki/Config-v0.10) for detailed configuration options.
+
+<details>
+<summary>Basic Configuration</summary>
+
+```yaml
+zurg: v1
+token: YOUR_RD_API_TOKEN
+
+enable_repair: true
+rar_action: extract
+addl_playable_extensions:
+  - mp3
+  - flac
+
+cache_network_test_results: true
+
+on_library_update: |
+  for arg in "$@"
+  do
+      echo "detected update on: $arg"
+  done
+
+auto_analyze_new_torrents: true
+```
+
+- `zurg`: Configuration version (currently v1)
+- `token`: Your Real-Debrid API token
+- `enable_repair`: Enable automatic torrent repair
+- `rar_action`: Action for RAR files (extract, delete, or none)
+- `addl_playable_extensions`: Additional file extensions to consider playable
+- `cache_network_test_results`: Cache network test results
+- `on_library_update`: Script to run when the library is updated
+- `auto_analyze_new_torrents`: Analyze new torrents for media info
+
+</details>
+
+<details>
+<summary>Directory Definitions and Filters</summary>
+
+```yaml
+directories:
+  anime:
+    group: media
+    group_order: 10
+    filters:
+      - and:
+        - has_episodes: true
+        - any_file_inside_regex: /^\[/
+        - any_file_inside_not_regex: /s\d\de\d\d/i
+
+  shows:
+    group: media
+    group_order: 20
+    filters:
+      - has_episodes: true
+
+  movies:
+    group: media
+    group_order: 30
+    only_show_the_biggest_file: true
+    filters:
+      - regex: /.*/
+
+  "4k english shows":
+    filters:
+      - and:
+        - media_info_with_audio_language: eng
+        - media_info_resolution: 4k
+        - has_episodes: true
+
+  # ... more directory definitions ...
+```
+
+Each directory can have:
+- `group`: Categorizes directories
+- `group_order`: Prioritizes directories within the same group
+- `filters`: Conditions to determine which torrents belong in this directory
+- `only_show_the_biggest_file`: Show only the largest file in the torrent
+
+</details>
+
+<details>
+<summary>Filter Types</summary>
+
+- `regex`, `contains`, `contains_strict`: Filter by torrent name
+- `not_regex`, `not_contains`, `not_contains_strict`: Exclude torrents
+- `size_gte`, `size_lte`: Filter by torrent size
+- `any_file_inside_*`: Apply filtering to file names within the torrent
+- `has_episodes`: Detect torrents containing episode sequences
+- `is_music`: Detect music torrents
+- `media_info_*`: Filter by media information (resolution, bit rate, duration, languages)
+
+</details>
+
+<details>
+<summary>Advanced Filtering</summary>
+
+Use nested `and` and `or` to create complex filter logic:
+
+```yaml
+filters:
+  - and:
+      - contains: keyword1
+      - not_contains: keyword2
+  - or:
+      - contains_strict: Keyword3
+      - any_file_inside_regex: /pattern/i
+```
+
+</details>
+
+<details>
+<summary>Sample Configuration</summary>
+
+Here's a more detailed sample configuration:
+
+```yaml
+# Zurg configuration version
+zurg: v1
+token: YOUR_RD_API_TOKEN # https://real-debrid.com/apitoken
+
+# Each token in RD allows some amount of bandwidth daily
+# If you need to go over past this limit (e.g. Plex extensive analysis)
+# you can buy a new RD account and specify the token here
+# download_tokens:
+# - ANOTHER_RD_API_TOKEN
+# - ANOTHER_RD_API_TOKEN_2
+
+# Do not change this if you are running it inside a docker container
+# host: "[::]"
+# port: 9999
+
+# You can protect your zurg server with username+password auth
+# username: yowmamasita
+# password: 1234
+
+# You can proxy all zurg requests like this:
+# proxy: "http://[username:password@]host:port"
+# proxy: "https://[username:password@]host:port"
+# proxy: "socks5://[username:password@]host:port"
+
+# BEWARE! THERE CAN ONLY BE 1 INSTANCE OF ZURG THAT SHOULD REPAIR YOUR TORRENTS
+enable_repair: true
+# Action to take when encountering RAR files (extract, delete, or none)
+rar_action: extract
+# Add file extensions that you want to be considered playable and extracted from rar's (not moved to the unplayable directory)
+addl_playable_extensions:
+- mp3
+- flac
+
+# How often should zurg look for broken torrents and repair them?
+# repair_every_mins: 60
+
+# How often should zurg remount all your downloads?
+# downloads_every_mins: 720
+
+# How often should zurg dump your zurgtorrent files to the dump folder?
+# dump_torrents_every_mins: 1440
+
+# RD API timeout setting
+# api_timeout_secs: 60
+
+# RD download timeout setting
+# download_timeout_secs: 10
+
+# API response failures until considered failed
+# retries_until_failed: 2
+
+# Every time zurg runs, it will do tests checking RD download servers reachability
+# this setting saves the results in a file so it doesn't run every startup
+cache_network_test_results: true
+
+# This is useful for ensuring Plex adds your new content immediately
+# Uncomment the next line for triggering a partial scan
+# on_library_update: sh plex_update.sh "$@"
+# on_library_update: '& C:\zurg\plex_udpdate.ps1 $args'
+on_library_update: |
+  for arg in "$@"
+  do
+      echo "detected update on: $arg"
+  done
+
+# In order to use media_info_* filters, your torrents need to be analyzed first
+auto_analyze_new_torrents: true
+
+# List of directory definitions and their filtering rules
+directories:
+  # Configuration for anime shows
+  anime:
+    group: media # directories on different groups have duplicates of the same torrent
+    group_order: 10 # group order = priority, it defines who eats first on a group
+    filters:
+      - and: # you can use nested 'and' & 'or' conditions
+        - has_episodes: true # intelligent detection of episode files inside a torrent
+        - any_file_inside_regex: /^\[/ # usually anime starts with [ e.g. [SubsPlease]
+        - any_file_inside_not_regex: /s\d\de\d\d/i # and usually anime doesn't use SxxExx
+
+  shows:
+    group: media
+    group_order: 20
+    filters:
+      - has_episodes: true  # intelligent detection of episode files inside a torrent
+
+  movies:
+    group: media  # because anime, shows and movies are in the same group,
+    group_order: 30 # and anime and shows has a lower group_order number than movies, all torrents that doesn't fall into the previous 2 will fall into movies
+    only_show_the_biggest_file: true # let's not show the other files besides the movie itself
+    filters:
+      - regex: /.*/ # you cannot leave a directory without filters because it will not have any torrents in it
+
+  # media info directories
+
+  # when you use media_info filters group_order doesn't matter anymore
+  # just make sure they are on unique groups
+  # in future versions (0.10rc3+), you can opt to omit group completely
+
+  "4k english shows":
+    filters:
+      - and:
+        - media_info_with_audio_language: eng
+        - media_info_resolution: 4k
+        - has_episodes: true
+
+  "4k foreign shows":
+    filters:
+      - and:
+        - media_info_without_audio_language: eng
+```
+</details>
+
+Usage:
+  zurg [flags]
+  zurg [command]
+
+Available Commands:
+  clear-downloads Clear all downloads (unrestricted links) in your account
+  clear-torrents  Clear all torrents in your account
+  completion      Generate the autocompletion script for the specified shell
+  help            Help about any command
+  network-test    Run a network test
+  version         Prints zurg's current version
+
+Flags:
+  -c, --config string   config file path (default "./config.yml")
+  -h, --help            help for zurg
+```
+
+## Usage with Rclone
+
+To use Zurg with Rclone, add the following configuration to your `rclone.conf` file:
+
+```ini
+[zurg]
+type = webdav
+url = http://zurg:9999
+username = your_real_debrid_username
+password = your_real_debrid_password
+```
+
+Then you can mount your Real-Debrid storage using:
+
+```bash
+rclone mount zurg: /mnt/zurg
+```
+
+For more detailed instructions on using Zurg with Rclone, see our [Rclone guide](/docs/tools/rclone).
+
+## Running Zurg with Docker
+
+To run Zurg with Docker for Plex, follow these steps:
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/debridmediamanager/zurg-testing.git
+   # or
+   git clone https://github.com/debridmediamanager/zurg.git
+   ```
+
+2. Add your Real-Debrid token in `config.yml`
+
+3. Create a mount directory:
+   ```bash
+   sudo mkdir -p /mnt/zurg
+   ```
+
+4. Run Docker Compose:
+   ```bash
+   docker compose up -d
+   ```
+
+5. Verify the installation:
+   ```bash
+   time ls -1R /mnt/zurg
+   ```
+
+You're done! If you make edits to your `config.yml`, just run `docker compose restart zurg`.
+
+<Callout type="info">
+  A web server is now running at localhost:9999. When using Zurg on a server outside your home network, ensure that "Use my Remote Traffic automatically when needed" is unchecked on your Real-Debrid Account page.
+</Callout>

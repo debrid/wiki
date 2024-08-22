@@ -6,6 +6,7 @@
         "index",
         "---Tools---",
         "(tools)/rclone",
+        "(tools)/zurg",
         "---Apps---",
         "(apps)/riven",
         "---Scrapers---",
