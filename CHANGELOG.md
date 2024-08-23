@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0](https://github.com/debrid/wiki/compare/v0.5.0...v0.6.0) (2024-08-23)
+
+
+### Miscellaneous Chores
+
+* release 0.6.0 ([d1bf489](https://github.com/debrid/wiki/commit/d1bf4890cdfcdcfba8bedf54d671b64f63db195b))
+
 ## [0.5.0](https://github.com/debrid/wiki/compare/v0.4.0...v0.5.0) (2024-08-21)
 
 
