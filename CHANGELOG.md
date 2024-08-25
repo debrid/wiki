@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.1](https://github.com/debrid/wiki/compare/v0.6.0...v0.6.1) (2024-08-25)
+
+
+### Bug Fixes
+
+* correct zilean database host ([d93613f](https://github.com/debrid/wiki/commit/d93613fe34e0b96a03368f559fabe06de3e05511))
+
 ## [0.6.0](https://github.com/debrid/wiki/compare/v0.5.0...v0.6.0) (2024-08-23)
 
 
