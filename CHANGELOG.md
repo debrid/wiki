@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.0](https://github.com/debrid/wiki/compare/v0.6.1...v0.7.0) (2024-08-30)
+
+
+### Features
+
+* Create comet.mdx ([#14](https://github.com/debrid/wiki/issues/14)) ([4b10b12](https://github.com/debrid/wiki/commit/4b10b1256598f454361afc612f370239e32ebdf3))
+
 ## [0.6.1](https://github.com/debrid/wiki/compare/v0.6.0...v0.6.1) (2024-08-25)
 
 
