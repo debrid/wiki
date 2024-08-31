@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.1](https://github.com/debrid/wiki/compare/v0.7.0...v0.7.1) (2024-08-31)
+
+
+### Bug Fixes
+
+* Update meta.json ([#16](https://github.com/debrid/wiki/issues/16)) ([cc5a5f2](https://github.com/debrid/wiki/commit/cc5a5f2405ff76cae96e9fbd893974c3a109ca12))
+
 ## [0.7.0](https://github.com/debrid/wiki/compare/v0.6.1...v0.7.0) (2024-08-30)
 
 
