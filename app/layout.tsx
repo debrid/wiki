@@ -32,7 +32,6 @@ export const metadata: Metadata = {
     description:
         "A community-driven wiki that aims to provide information on the various debrid services and projects related to it such as Zurg, Riven, Plex Debrid, and more.",
     openGraph: {
-        images: "/cover.png",
         title: {
             template: "%s | Debrid Wiki",
             default: "Debrid Wiki",
@@ -47,7 +46,6 @@ export const metadata: Metadata = {
         title: "Debrid Wiki",
         description:
             "A community-driven wiki that aims to provide information on the various debrid services and projects related to it such as Zurg, Riven, Plex Debrid, and more.",
-        images: "/cover.png",
     },
     metadataBase: baseUrl,
     applicationName: "Debrid Wiki",
