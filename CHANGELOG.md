@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.8.0](https://github.com/debrid/wiki/compare/v0.7.3...v0.8.0) (2024-09-07)
+
+
+### Features
+
+* add Docker ([3675235](https://github.com/debrid/wiki/commit/36752352f772fb41d7a56f7db09219ac9d013e45))
+
+
+### Bug Fixes
+
+* fix the url links and add some ([efc0a18](https://github.com/debrid/wiki/commit/efc0a18dca0af63c11297f8c5cbda8a8085cd1c4))
+
 ## [0.7.3](https://github.com/debrid/wiki/compare/v0.7.2...v0.7.3) (2024-09-07)
 
 
