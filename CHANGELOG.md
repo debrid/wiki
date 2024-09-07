@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.2](https://github.com/debrid/wiki/compare/v0.9.1...v0.9.2) (2024-09-07)
+
+
+### Bug Fixes
+
+* Revert "chore(main): release 0.9.1 ([#23](https://github.com/debrid/wiki/issues/23))" ([#24](https://github.com/debrid/wiki/issues/24)) ([331d505](https://github.com/debrid/wiki/commit/331d505c5efe413106bd3bb2f75c8c7e9a5be6b8))
+
 ## [0.9.0](https://github.com/debrid/wiki/compare/v0.8.1...v0.9.0) (2024-09-07)
 
 
