@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.0](https://github.com/debrid/wiki/compare/v0.8.1...v0.9.0) (2024-09-07)
+
+
+### Features
+
+* add umami ([61625e4](https://github.com/debrid/wiki/commit/61625e43260df03d46cdba2f2b2c19bbc12ab981))
+
 ## [0.8.1](https://github.com/debrid/wiki/compare/v0.8.0...v0.8.1) (2024-09-07)
 
 
