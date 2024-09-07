@@ -22,7 +22,7 @@ export default function Layout({ children }: { children: ReactNode }) {
 
                 <script
                     defer
-                    src="http://umami:3000/script.js"
+                    src="https://stats.ayush.gg/script.js"
                     data-website-id="b859b172-b345-47b2-aa4b-0576f20cee75"
                 ></script>
             </body>
