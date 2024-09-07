@@ -1,0 +1,90 @@
+---
+title: Docker
+description: Docker is a platform for developing, shipping, and running applications in containers.
+---
+
+import { File, Folder, Files } from "fumadocs-ui/components/files";
+
+<div align="center">
+    <a href="https://github.com/docker">
+        <img
+            alt="Zurg"
+            src="/img/docker/docker.png"
+            style={{ borderRadius: "10px" }}
+        ></img>
+    </a>
+</div>
+
+## Overview
+
+Docker is a platform for developing, shipping, and running applications in containers. It allows you to separate you to separate applications from your machine and run them in a container. This is useful for many reasons, such as portability,
+isolation, and resource management. Docker is a very powerful tool and is used in many different applications.
+
+## Prerequisites
+
+## Installation
+
+There are many different ways to install Docker, depending on your operating system. The official Docker documentation has a great guide on how to install Docker on your system. You can find the installation guide [here](https://docs.docker.com/engine/).
+
+What do we recommend? We recommend you to install Docker Engine instead of Docker Desktop (even for WSL2 to prevent any issues).
+
+<Callout type="info">
+    We will be assuming Linux (Ubuntu) for the rest of the guide. Guide for
+    other OSes is not much different.
+</Callout>
+
+### Linux (Ubuntu)
+
+<Callout type="info">
+    The following commands are for Ubuntu. For other distributions, please refer
+    to the official documentation.
+</Callout>
+
+Official [Docker Installation Guide](https://docs.docker.com/engine/install/ubuntu/) will be followed. It is recommended to follow the official guide for the most up-to-date instructions.
+
+<Callout type="warn">
+    Make sure to follow this [post installation
+    step](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user)
+    to manage Docker as a non-root user if following the official guide.
+</Callout>
+
+```bash title="Remove old versions"
+for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
+```
+
+```bash title="Setup Docker's apt repository"
+# Add Docker's official GPG key:
+sudo apt-get update
+sudo apt-get install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+```
+
+<Callout type="info">
+    If you use an Ubuntu derivative distro, such as Linux Mint, you may need to
+    use `UBUNTU_CODENAME` instead of `VERSION_CODENAME`.
+</Callout>
+
+```bash title="Install Docker Engine"
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+
+```bash title="Post-installation steps for Linux"
+sudo groupadd docker
+sudo usermod -aG docker $USER
+```
+
+Log out and log back in so that your group membership is re-evaluated.
+
+```bash title="Verify installation"
+docker --version
+docker run hello-world
+```

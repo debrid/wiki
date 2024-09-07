@@ -7,7 +7,11 @@ import { File, Folder, Files } from "fumadocs-ui/components/files";
 
 <div align="center">
     <a href="https://rclone.org/">
-        <img alt="Rclone" src="/img/rclone/rclone.png"></img>
+        <img
+            alt="Rclone"
+            src="/img/rclone/rclone.png"
+            style={{ borderRadius: "10px" }}
+        ></img>
     </a>
 </div>
 
@@ -309,6 +313,7 @@ file in the same directory as `docker-compose.yml`.
     then using the same config in the docker container. This way we don't have to setup the config ourselves in the container.
 
     tldr; copying that specific remote from `~/.config/rclone/rclone.conf` to the `rclone.conf` file in the same directory as `docker-compose.yml`.
+
 </Callout>
 
 Another way is to see the rclone documentation for the remote you want to setup. They have examples for most of the remotes.
