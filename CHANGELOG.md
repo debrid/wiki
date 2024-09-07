@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.3](https://github.com/debrid/wiki/compare/v0.7.2...v0.7.3) (2024-09-07)
+
+
+### Bug Fixes
+
+* remove cover.png ([cd1ff36](https://github.com/debrid/wiki/commit/cd1ff3631b09dfeb1b95f5208835180c703c5949))
+
 ## [0.7.2](https://github.com/debrid/wiki/compare/v0.7.1...v0.7.2) (2024-09-07)
 
 
