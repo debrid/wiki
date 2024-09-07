@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.4](https://github.com/debrid/wiki/compare/v0.9.3...v0.9.4) (2024-09-07)
+
+
+### Bug Fixes
+
+* fix analytics ([e8a9bbd](https://github.com/debrid/wiki/commit/e8a9bbdfe69144cfd044584f808d2627b6682bf4))
+
 ## [0.9.3](https://github.com/debrid/wiki/compare/v0.9.2...v0.9.3) (2024-09-07)
 
 
