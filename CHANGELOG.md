@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.1](https://github.com/debrid/wiki/compare/v0.8.0...v0.8.1) (2024-09-07)
+
+
+### Bug Fixes
+
+* since riven shows error on wrong origin, change faq error ([9ffcc4a](https://github.com/debrid/wiki/commit/9ffcc4aa4efde51c357c3ea919cfc4b920576084))
+
 ## [0.8.0](https://github.com/debrid/wiki/compare/v0.7.3...v0.8.0) (2024-09-07)
 
 
